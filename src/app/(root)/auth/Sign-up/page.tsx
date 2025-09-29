@@ -23,11 +23,14 @@ import Link from "next/link";
 import { EyeIcon, Loader2, Slash } from "lucide-react";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+ 
 
 
 
 
 const Signup = () => {
+    const router = useRouter()
     const [passwordShow, setpasswordShow] = useState(false)
     const [loading, setIsloading] = useState(false)
     
@@ -41,12 +44,14 @@ const Signup = () => {
         }
     })
     const onSubmit = async (data: z.infer<typeof registerSchema>) => {
+        const { username } = data
         try {
             setIsloading(true)
           const res =  await axios.post('/api/auth/sign-up', data)
           toast("succesfully",{
             description:res.data.message
           })
+           router.replace(`/auth/verify/${username}`)
 
         } catch (error) {
             console.log("axioserror during registration",error)
@@ -57,6 +62,7 @@ const Signup = () => {
         } finally{
             setIsloading(false)
         } 
+       
            
     }
     return (

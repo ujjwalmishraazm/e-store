@@ -7,13 +7,14 @@ export interface User extends Document {
     username: string;
     email: string;
     password: string;
+     verifycode:string
     isEmailVerified: boolean;
     isemailverificationotpexpired: Date;
     phone: string;
     address:string;
     avatar:string;
     deletedAt:Date;
-    verifycode:string
+   
 }
 const UserSchema: Schema<User> = new mongoose.Schema(
     {
@@ -37,7 +38,8 @@ const UserSchema: Schema<User> = new mongoose.Schema(
             required: true,
         },
         verifycode:{
-            type:String
+            type:String,
+            required:true,
         },
         isEmailVerified: {
             type: Boolean,

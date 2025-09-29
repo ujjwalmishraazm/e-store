@@ -2,20 +2,21 @@ import { sendVerificationEmail } from "@/helper/verificationEmail";
 import { dbconnect } from "@/lib/dbconnect";
 import registerSchema from "@/lib/signup";
 import Usermodel from "@/model/User.model";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     try {
         await dbconnect();
-          const payload = await request.json();
+        const payload = await request.json();
         const validateSchema = registerSchema.pick({
             username: true,
             email: true,
             password: true,
         });
-      
-        const validateData = validateSchema.safeParse(payload);
+
+        const validateData = registerSchema.safeParse(payload);
         if (!validateData.success) {
-            return Response.json(
+            return NextResponse.json(
                 { success: false, message: "unable to get data" },
                 {
                     status: 404,
@@ -23,9 +24,11 @@ export async function POST(request: Request) {
             );
         }
         const { username, email, password } = validateData.data;
+        console.log("username,email,password", username, email, password);
+        // check if user already exist
         const usernameexist = await Usermodel.findOne({ username });
         if (usernameexist) {
-            return Response.json(
+            return NextResponse.json(
                 {
                     success: false,
                     message: "user already exist with this email",
@@ -38,11 +41,11 @@ export async function POST(request: Request) {
         const verifyCode = Math.floor(
             100000 + Math.random() * 900000
         ).toString();
-        //veifycodeexpiry 100mins from now
+        //veifycodeexpiry 10mins from now
         const verifyCodeExpiry = new Date(Date.now() + 10 * 60 * 10000);
 
         if (existingUserwithEmail) {
-            return Response.json(
+            return NextResponse.json(
                 {
                     success: false,
                     message: "user already exist with this email",
@@ -56,10 +59,13 @@ export async function POST(request: Request) {
             username,
             email,
             password,
-            emailVerificationOTP: verifyCode,
+            emailVerificationOTP:verifyCode,
             emailVerificationOTPExpiry: verifyCodeExpiry,
             isEmailVerified: false,
+            phone: "098764321",
+            isemailverificationotpexpired: new Date(Date.now() + 10 * 60 * 1000),
         });
+        console.log("new user", user);
         await user.save();
         // send verify email
         const emailResponse = await sendVerificationEmail(
@@ -67,8 +73,9 @@ export async function POST(request: Request) {
             username,
             verifyCode
         );
+        console.log("email response", emailResponse);
         if (!emailResponse.success) {
-            return Response.json(
+            return NextResponse.json(
                 {
                     success: false,
                     message: emailResponse.message,
@@ -76,7 +83,7 @@ export async function POST(request: Request) {
                 { status: 500 }
             );
         }
-        return Response.json(
+        return NextResponse.json(
             {
                 success: true,
                 message: "user created successfully",
@@ -86,7 +93,8 @@ export async function POST(request: Request) {
             { status: 201 }
         );
     } catch (error) {
-        return Response.json(
+        console.error("Error in sign-up:", error);
+        return NextResponse.json(
             { success: false, message: "internal server error", error },
             { status: 500 }
         );

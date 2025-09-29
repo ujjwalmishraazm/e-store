@@ -88,7 +88,7 @@ const admindashboardSideMenu = [
   {     
     title: "Media",
     icon: MdOutlinePermMedia,
-    route: "#"
+    route: "/admin/media"
   }
 ];
 export default admindashboardSideMenu;
