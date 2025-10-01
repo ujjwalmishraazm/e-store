@@ -1,12 +1,13 @@
 import { dbconnect } from "@/lib/dbconnect";
-import Usermodel from "@/model/User.model";
+import Usermodel from "@/model/User.model";;
 export async function POST(request: Request) {
     try {
         await dbconnect();
         const { username, verifyCode } = await request.json();
-        if (!(username || verifyCode)) {
+            console.log("username,verifycode", username, verifyCode);
+        if (!(username || !verifyCode)) {
             return Response.json(
-                { success: "false", message: "email and verifycode not got" },
+                { success: "false", message: "username and verifycode not found" },
                 { status: 404 }
             );
         }
@@ -20,15 +21,16 @@ export async function POST(request: Request) {
             );
         }
         const verified = user.verifyCode == verifyCode;
-        const iscodenotExpired = new Date(user.verifyCodeExpiry) > new Date();
+        console.log(verified, "verified");
+        const iscodenotExpired = new Date(user.emailVerificationOTPExpiry) > new Date();
         if (verified && iscodenotExpired) {
-            user.verified = true;
+            user.isEmailVerified = true;
             await user.save();
             return Response.json(
                 { success: true, message: "succesfully verified" },
                 { status: 201 }
             );
-        }else if (!iscodenotExpired) {
+        } else if (!iscodenotExpired) {
       // Code has expired
       return Response.json(
         {

@@ -42,8 +42,8 @@ export async function POST(request: Request) {
             100000 + Math.random() * 900000
         ).toString();
         //veifycodeexpiry 10mins from now
-        const verifyCodeExpiry = new Date(Date.now() + 10 * 60 * 10000);
-
+        const verifyCodeExpiry = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes from now
+        console.log("verifycode", verifyCode);
         if (existingUserwithEmail) {
             return NextResponse.json(
                 {
@@ -59,13 +59,13 @@ export async function POST(request: Request) {
             username,
             email,
             password,
-            emailVerificationOTP:verifyCode,
+            verifyCode,
             emailVerificationOTPExpiry: verifyCodeExpiry,
             isEmailVerified: false,
             phone: "098764321",
             isemailverificationotpexpired: new Date(Date.now() + 10 * 60 * 1000),
         });
-        console.log("new user", user);
+        console.log("new user", user.verifyCode);
         await user.save();
         // send verify email
         const emailResponse = await sendVerificationEmail(

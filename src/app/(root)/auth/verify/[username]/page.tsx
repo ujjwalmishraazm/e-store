@@ -30,20 +30,22 @@ const Verify = () => {
         resolver: zodResolver(verifySchema)
     })
     const onSubmit = async (data: z.infer<typeof verifySchema>) => {
+        console.log("data", data.code)
+        
         try {
             setIsloading(true)
             const res = await axios.post(`/api/auth/verify-code`, {
                 username: params.username,
-                verifycode: data.code
+                verifyCode: data.code
             })
             toast("successfully", {
                 description: res.data.message
             }) 
-           router.replace("/sign-In")
+           router.replace("/login")
         } catch (error) {
-            console.error(error, "axios error at verificationof code")
+            console.error(error, "axios error at verification of code")
             const axioserror = error as AxiosError<{message:string}>
-            toast("unsuccesflly", {
+            toast("unsuccessfully", {
                 description:axioserror.response?.data.message
             })
 
