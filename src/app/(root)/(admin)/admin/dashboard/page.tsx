@@ -1,6 +1,7 @@
+"use client"
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   return (
     <div>
       admindashboard
@@ -8,4 +9,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

@@ -1,11 +1,15 @@
 import React from 'react'
 
-const Page = () => {
+const Page = ( ) => {
   return (
     <div>
-      website page
+      Edit page 
     </div>
   )
 }
+
+
+
+
 
 export default Page

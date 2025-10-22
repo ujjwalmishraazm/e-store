@@ -18,15 +18,15 @@ const admindashboardSideMenu = [
   {
     title: "Categories",    
     icon: BiCategory,
-    route: "/hhhhhhh",
+    route: "/admin/category",
     subMenu: [
       {
         title: "Add Category",
-        route: "#"
+        route: "/admin/category/add"
       },
       {
         title: "All Categories",
-        route: "#"
+        route: "/admin/category"
       }
     ]
   },

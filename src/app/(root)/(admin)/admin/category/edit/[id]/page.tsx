@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Page = () => {
+const editcategory = () => {
   return (
     <div>
-      website page
+      
     </div>
   )
 }
 
-export default Page
+export default editcategory
