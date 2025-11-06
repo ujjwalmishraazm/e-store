@@ -33,18 +33,18 @@ const admindashboardSideMenu = [
   {
     title: "Products",
     icon: IoShirtOutline,
-    route: "#",
+    route: "/admin/product",
     subMenu: [
       {
         title: "Add Product",
-        route: "#"
+        route: "/admin/product/add"
       },
       {
         title: "All variat",
         route: "#"
       },{
         title:"All product",
-        route:"#"
+        route:"/admin/product"
       },{
         title:"Product Varient",
         route:"#"
